@@ -86,3 +86,9 @@ class UserProfile(models.Model):
 class Fqa(models.Model):
     email = models.CharField(max_length=32)
     content = models.CharField(max_length=256)
+
+class AdopterInfo(models.Model):
+    name = models.CharField(max_length=32)
+    email = models.CharField(max_length=32)
+    phone = models.CharField(max_length=32)
+    animal_id= models.IntegerField()

@@ -15,4 +15,7 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('myaccount/', views.myaccount, name='myaccount'),
     path('fqa/', views.fqa, name='fqa'),
+    path('show_shelter2/', views.show_shelter2, name='show_shelter2'),
+    path('adopt_status/', views.adopt_status, name='adopt_status'),
+
 ]

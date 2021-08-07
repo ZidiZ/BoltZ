@@ -1,11 +1,76 @@
-{% extends 'bolt/base.html' %} 
-{% load static %} 
-{% block title_block %} 
-My acconut 
-{% endblock %} 
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Bolt</title>
+
+    <!-- Bootstrap core CSS -->
+<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="/static/bootstrap/css/carousel.css" rel="stylesheet">
+  </head>
 
 
-{% block body_block %}
+  <body>
+ 
+ <!-- Main navigate bar on the top -->
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <h1 class="navbar-brand" >Bolt</h1>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/bolt/">Index</a>
+          </li>
+             <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/bolt/shelter/123/">Shelter</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/bolt/about/">About us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/bolt/fqa/">FAQ</a>
+          </li>
+        </ul>
+
+          {% if request.session.username %}
+              <a href="/bolt/myaccount/">{{ request.session.username }}</a>||
+              <a href="/bolt/logout/">logout</a>
+          {% else %}
+              <a class="btn btn-sm btn-outline-secondary" href="/bolt/login/">Log in</a>
+          {% endif %}
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+
 <div class="container">
     <h1>My information</h1>
     <div>
@@ -52,7 +117,21 @@ My acconut
         </tbody>
       </table>
     <div>
-    <img src="{% static 'images/bolt.jpeg' %}" alt="Picture of bolt" />
+    <img src="/static/images/bolt.jpeg" alt="Picture of bolt" />
 </div>
 </div>
-{% endblock %}
+
+
+  <!-- FOOTER -->
+  <footer class="container">
+    <p class="float-end"><a href="/bolt/">Back to top</a></p>
+    <p>&copy; Bolt Itech Group</p>
+  </footer>
+</main>
+
+
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+      
+  </body>
+</html>

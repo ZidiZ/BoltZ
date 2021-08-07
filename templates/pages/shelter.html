@@ -81,7 +81,7 @@
    <!-- Cards displaying -->
   <div class="album py-5 bg-light">
     <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <div id="abox" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
 	  <!-- Animal1 -->
         <div class="col">
@@ -153,6 +153,48 @@
 
 
     <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+<div id="box3" style="display:none;border-radius:20px;width: 500px;height:500px;position: fixed;top:50%;left: 50%;margin-left: -250px;margin-top: -250px;background-color: #e5df19;border: 2px solid red;">
+    <table>
+        <thead>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody id="tt2">
+            <button class="cancel">cancel</button>
+        </tbody>
+    </table>
+</div>
+
+<div id="box2" style="display:none;border-radius:20px;width: 500px;height:500px;position: fixed;top:50%;left: 50%;margin-left: -250px;margin-top: -250px;background-color: #e5df19;border: 2px solid red;">
+    <table>
+        <thead>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>name:</td>
+                <td><input id="name2" type="text"></td>
+            </tr>
+            <tr>
+                <td>email:</td>
+                <td><input id="email2" type="text"></td>
+            </tr>
+            <tr>
+                <td>phone:</td>
+                <td><input id="phone" type="text"></td>
+            </tr>
+            <tr>
+                <td><button class="cancel">cancel</button></td>
+                <td><button id="submit2">submit</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 <div id="box" style="display:none;border-radius:20px;width: 500px;height:500px;position: fixed;top:50%;left: 50%;margin-left: -250px;margin-top: -250px;background-color: #e5df19;border: 2px solid red;">
     <table>
         <thead>
@@ -203,7 +245,7 @@
                 <td><input id="picture" type="file"></td>
             </tr>
             <tr>
-                <td></td>
+                <td><button class="cancel">cancel</button></td>
                 <td><button id="submit">submit</button></td>
             </tr>
         </tbody>
@@ -240,6 +282,108 @@
                 },
             });
           $('#box').hide(2000);
+          window.location.reload();
         });
+      $.ajax({
+          url:'/bolt/show_shelter2/',
+          type:'get',
+          dataType:'json',
+          success:function (res) {
+              $("#abox").empty();
+              for(var i =0;i<res.data.length;i++){
+                  var htmlstr='<div class="col">\n' +
+                      '          <div class="card shadow-sm">\n' +
+                      '            <img class="bd-placeholder-img card-img-top" width="90%" height="500" src="'+res.data[i].picture+'" preserveAspectRatio="xMidYMid slice" focusable="false"> \n' +
+                      '\n' +
+                      '            <div class="card-body">\n' +
+                      '\t\t\t<!-- Using a list? or just display the animals name-->\n' +
+                      '              <p class="card-text">'+res.data[i].name+' ('+res.data[i].kind+')</p>\n' +
+                      '              <div class="d-flex justify-content-between align-items-center">\n' +
+                      '                <div class="btn-group">\n' +
+                      '                  <button type="button" class="btn btn-sm btn-outline-secondary View" data-id='+res.data[i].id+'>View</button>\n'
+                      if(res.data[i].adoption_status=="ADOPTED"){
+                          htmlstr+=                      '                  <button type="button" disabled="disabled" class="btn btn-sm btn-outline-secondary Adopt" data-id='+res.data[i].id+'>Adopt</button>\n'
+
+                      }else{
+                             htmlstr+=                    '                  <button type="button" class="btn btn-sm btn-outline-secondary Adopt" data-id='+res.data[i].id+'>Adopt</button>\n'
+
+                      }
+                      htmlstr+=
+                      '                </div>\n' +
+                      '                \n' +
+                      '              </div>\n' +
+                      '            </div>\n' +
+                      '          </div>\n' +
+                      '        </div>'
+                  $("#abox").append(htmlstr);
+              }
+              $('.Adopt').click(function () {
+                  alert(1)
+                  var id = $(this).attr('data-id')
+                  $("#box2").show(2000);
+                  $("#submit2").click(function () {
+                      $.ajax({
+                          url:"/bolt/adopt_status/",
+                          dataType:'json',
+                          type:'post',
+                          data:{
+                            id:id,
+                            name:$("#name2").val(),
+                              email:$("#email2").val(),
+                              phone:$("#phone").val(),
+                          },
+                          success:function (res) {
+                              alert(res.data);
+                              window.location.reload();
+                          }
+                      });
+                  })
+              })
+               $(".View").click(function(){
+          var id = $(this).attr('data-id')
+          $("#box3").show();
+          $.ajax({
+              url:"/bolt/adopt_status/",
+              dataType:'json',
+              type:'get',
+              data:{
+                id:id,
+              },
+              success:function (res) {
+                  $("#tt2").empty();
+                  var html2='     <tr>\n' +
+                      '                <td>name:</td>\n' +
+                      '                <td>'+res.data.name+'</td>\n' +
+                      '            </tr>\n' +
+                      '            <tr>\n' +
+                      '                <td>email:</td>\n' +
+                      '                <td>'+res.data.email+'</td>\n' +
+                      '            </tr>\n' +
+                      '            <tr>\n' +
+                      '                <td>phone:</td>\n' +
+                      '                <td>'+res.data.phone+'</td>\n' +
+                      '            </tr>\n' +
+                      '            <tr>\n' +
+                      '                <td><button class="cancel">cancel</button></td>\n' +
+                      '                <td></td>\n' +
+                      '            </tr>'
+                  $("#tt2").append(html2);
+                  $('.cancel').click(function () {
+                      $("#box").hide();
+                      $("#box2").hide();
+                      $("#box3").hide();
+                  })
+              }
+          });
+      })
+          }
+
+      })
+      $('.cancel').click(function () {
+          $("#box").hide();
+          $("#box2").hide();
+          $("#box3").hide();
+      })
+
   </script>
 </html>
